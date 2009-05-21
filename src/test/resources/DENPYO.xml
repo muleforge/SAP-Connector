@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<jco name="Z_BAPI_ACC_DOCUMENT_POST" version="1.0">
+  <import>
+    <structure name="DOCUMENTHEADER">
+	<field name="BUS_ACT">RFBU</field>
+	<field name="USERNAME">P9371444</field>
+	<field name="HEADER_TXT">WS経由登録伝票テスト</field>
+	<field name="COMP_CODE">Z000</field>
+	<field name="DOC_DATE">2009-01-23</field>
+	<field name="PSTNG_DATE">2009-01-23</field>
+	<field name="DOC_TYPE">SA</field>
+    </structure>
+  </import>
+
+  <tables>
+    <table name="ACCOUNTGL">
+      <row id="0">
+	<field name="ITEMNO_ACC">000000001</field>
+	<field name="GL_ACCOUNT">0000111110</field>
+	<field name="ITEM_TEXT">テスト明細テキスト１WS</field>
+      </row>
+      <row id="1">
+	<field name="ITEMNO_ACC">000000002</field>
+	<field name="GL_ACCOUNT">0000111200</field>
+	<field name="ITEM_TEXT">テスト明細テキスト２WS</field>
+      </row>
+    </table>
+    <table name="CURRENCYAMOUNT">
+      <row id="0">
+	<field name="ITEMNO_ACC">000000001</field>
+	<field name="CURRENCY">JPY</field>
+	<field name="AMT_DOCCUR">100</field>
+      </row>
+      <row id="1">
+	<field name="ITEMNO_ACC">000000002</field>
+	<field name="CURRENCY">JPY</field>
+	<field name="AMT_DOCCUR">-100</field>
+      </row>
+    </table>
+  </tables>
+</jco>
+

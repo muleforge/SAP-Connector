@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="Shift_JIS" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+  <!-- Appender for rolling file -->
+<!--
+  <appender name="STDOUT" class="org.apache.log4j.RollingFileAppender">
+    <param name="Append" value="true"/> 
+    <param name="MaxFileSize" value="5MB"/> 
+    <param name="MaxBackupIndex" value="10"/> 
+    <param name="File" value="/tmp/proto.log" /> 
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p [%t] %c (%F:%L) - %m%n"/>
+    </layout>	    
+  </appender>
+-->
+  <!-- Appender for stdout -->
+  <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p [%t] %c (%F:%L) - %m%n"/>
+    </layout>	    
+  </appender>
+
+  <category name="org.newtech">
+    <priority value="debug" />
+  </category>
+
+  <!-- for Apache -->
+  <category name="org.apache">
+    <priority value="warn" />
+  </category>
+  
+  <!-- for root -->
+  <root>
+    <priority value ="warn" />
+    <appender-ref ref="STDOUT" />
+  </root>
+  
+</log4j:configuration>

@@ -1,0 +1,6 @@
+<jco name="BAPI_USER_GET_DETAIL" version="1.0">
+  <import>
+    <field name="USERNAME">P9375361</field>
+  </import>
+</jco>
+
