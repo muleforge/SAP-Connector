@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:stdio="http://www.mulesource.org/schema/mule/stdio/2.2"
+      xmlns:vm="http://www.mulesource.org/schema/mule/vm/2.2"
+      xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
+      xmlns:sap="http://www.mulesource.org/schema/mule/sap/2.2"
+      xmlns:file="http://www.mulesource.org/schema/mule/file/2.2"
+    xsi:schemaLocation="
+       http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.mulesource.org/schema/mule/core/2.2 
+       http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
+       http://www.mulesource.org/schema/mule/stdio/2.2 
+       http://www.mulesource.org/schema/mule/stdio/2.2/mule-stdio.xsd
+       http://www.mulesource.org/schema/mule/vm/2.2 
+       http://www.mulesource.org/schema/mule/vm/2.2/mule-vm.xsd
+       http://www.mulesource.org/schema/mule/http/2.2 
+       http://www.mulesource.org/schema/mule/http/2.2/mule-http.xsd
+       http://www.mulesource.org/schema/mule/file/2.2 
+       http://www.mulesource.org/schema/mule/file/2.2/mule-file.xsd
+       http://www.mulesource.org/schema/mule/sap/2.2 
+       META-INF/mule-sap.xsd">
+
+
+  <sap:connector name="SapConnector"
+		 jcoClient="800" 
+		 jcoUser="P9375361" 
+		 jcoPasswd="TESTTEST" 
+		 jcoLang="JA" 
+		 jcoAshost="158.201.70.174" 
+		 jcoSysnr="00" 
+		 jcoTrace="true"
+		 />
+
+  <sap:endpoint name="SapEndpoint"
+		address="sap://sap-endpoint"
+		 jcoClient="800" 
+		 jcoUser="P9375361" 
+		 jcoPasswd="TESTTEST" 
+		 jcoLang="JA" 
+		 jcoAshost="158.201.70.174" 
+		 jcoSysnr="00" 
+		 jcoTrace="true"
+		 />
+
+
+    <stdio:connector name="SystemStreamConnector"
+        promptMessage="Please enter something: "
+        messageDelayTime="1000"/>
+
+    <file:connector name="FileConnector"
+  		    moveToDirectory="./file_in/move_to" 
+  		    streaming="false" />
+
+    <model name="sapExample">
+        <service name="SAP">
+            <inbound>
+	      <stdio:inbound-endpoint system="IN"/>
+              <inbound-endpoint address="http://localhost:7777" synchronous="true"/>
+              <file:inbound-endpoint address="file://./in" />
+            </inbound>
+
+            <outbound>
+	      <chaining-router>
+<!--
+        	  <outbound-endpoint address="sap://test1" synchronous="true" />
+-->
+        	  <outbound-endpoint ref="SapEndpoint" synchronous="true" />
+		  <file:outbound-endpoint path="./result" />
+	      </chaining-router>
+            </outbound>
+        </service>
+    </model>
+</mule>

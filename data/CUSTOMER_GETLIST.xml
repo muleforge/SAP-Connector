@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<jco name="BAPI_CUSTOMER_GETLIST" version="1.0">
+  <tables>
+    <table name="IDRANGE">
+      <row id="0">
+	<field name="SIGN">I</field>
+	<field name="OPTION">CP</field>
+	<field name="LOW">*</field>
+	<field name="HIGH"></field>
+      </row>
+    </table>
+  </tables>
+</jco>
+
