@@ -22,9 +22,10 @@ public class SapConnector extends AbstractConnector
     private String jcoLang;
     private String jcoAshost;
     private String jcoSysnr;
-    private boolean jcoTrace;
-    private int JcoPoolCapacity;
-    private int JcoPeakLimit;
+    private boolean jcoTrace = false;
+    private int JcoPoolCapacity = 1;
+    private int JcoPeakLimit = 1;
+    private boolean isTest = false;
 
 
 	protected void doConnect() throws Exception
@@ -272,6 +273,42 @@ public class SapConnector extends AbstractConnector
     public void setJcoPeakLimit(int argJcoPeakLimit)
     {
         this.JcoPeakLimit = argJcoPeakLimit;
+    }
+
+    /**
+     * Gets the value of logger
+     *
+     * @return the value of logger
+     */
+    public static Log getLogger() {
+        return SapConnector.logger;
+    }
+
+    /**
+     * Sets the value of logger
+     *
+     * @param argLogger Value to assign to this.logger
+     */
+    public static void setLogger(Log argLogger) {
+        SapConnector.logger = argLogger;
+    }
+
+    /**
+     * Gets the value of isTest
+     *
+     * @return the value of isTest
+     */
+    public boolean isIsTest() {
+        return this.isTest;
+    }
+
+    /**
+     * Sets the value of isTest
+     *
+     * @param argIsTest Value to assign to this.isTest
+     */
+    public void setIsTest(boolean argIsTest) {
+        this.isTest = argIsTest;
     }
 
 }

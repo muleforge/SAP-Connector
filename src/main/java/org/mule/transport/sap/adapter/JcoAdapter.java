@@ -75,16 +75,22 @@ public class JcoAdapter
         }
                                       
 
-        connectProperties.setProperty(DestinationDataProvider.JCO_POOL_CAPACITY, "3");
-        connectProperties.setProperty(DestinationDataProvider.JCO_PEAK_LIMIT,    "10");
+
+        connectProperties.setProperty(DestinationDataProvider.JCO_POOL_CAPACITY,
+                                      new Integer(this.connector.getJcoPoolCapacity()).toString());
+        connectProperties.setProperty(DestinationDataProvider.JCO_PEAK_LIMIT,
+                                      new Integer(this.connector.getJcoPeakLimit()).toString());
+
         createDataFile(ABAP_AS_POOLED, "jcoDestination", connectProperties);
 
         destination = JCoDestinationManager.getDestination(ABAP_AS_POOLED);
         this.repository =  destination.getRepository();
     }
 
-    public Object invoke(Object payload) {
+    public Object invoke(Object payload) throws JCoException {
         JCoFunction function = (JCoFunction)payload;
+        function.execute(this.destination);
+        logger.info(function);
         return function;
     }
 
@@ -114,7 +120,7 @@ public class JcoAdapter
     }
 
     /**
-     * Describe <code>executeFunction</code> method here.
+     * <code>invoke</code> calls a BAPI request and obtains response.
      *
      * @param function a <code>JCO.Function</code> value
      */
@@ -129,20 +135,18 @@ public class JcoAdapter
     {
         File cfg = new File(name+"."+suffix);
         if(!cfg.exists())
+        {
+            try
             {
-                try
-                    {
-                        FileOutputStream fos = new FileOutputStream(cfg, false);
-                        properties.store(fos, "for connection");
-                        fos.close();
-                    }
-                catch (Exception e)
-                    {
-                        throw new RuntimeException("Unable to create the destination file "
-                                                   + cfg.getName(), e);
-                    }
+                FileOutputStream fos = new FileOutputStream(cfg, false);
+                properties.store(fos, "for connection");
+                fos.close();
             }
+            catch (Exception e)
+            {
+                throw new RuntimeException("Unable to create the destination file "
+                                                   + cfg.getName(), e);
+            }
+        }
     }
-    
-
 }

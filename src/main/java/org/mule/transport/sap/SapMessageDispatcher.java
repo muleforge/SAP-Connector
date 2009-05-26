@@ -1,5 +1,7 @@
 package org.mule.transport.sap;
 
+import java.util.ArrayList;
+
 import org.w3c.dom.Document;
 
 import org.apache.commons.logging.Log;
@@ -13,7 +15,7 @@ import org.mule.DefaultMuleMessage;
 
 import org.mule.api.lifecycle.InitialisationException;
 
-import org.mule.transport.sap.util.XmlUtils;
+import org.mule.transport.sap.transformer.XmlToJcoFunctionTransformer;
 
 /**
  * <code>SapMessageDispatcher</code> is a message dispatcher class
@@ -64,9 +66,9 @@ public class SapMessageDispatcher extends AbstractMessageDispatcher
     protected MuleMessage doSend(MuleEvent event) throws Exception
     {
 		logger.info("*****SapMessageDispatcher.doSend()*****");
-        logger.info(event.getMessageAsString());
+        //logger.info(event.getMessageAsString());
 
-		return new DefaultMuleMessage(this.connector.getMessageAdapter(process(event)));
+		return new DefaultMuleMessage(this.connector.getMessageAdapter(invoke(event)));
 	}
 
 	/**
@@ -101,9 +103,15 @@ public class SapMessageDispatcher extends AbstractMessageDispatcher
 		
 	}
 
-    private Object process(MuleEvent event) throws Exception
+    private Object invoke(MuleEvent event) throws Exception
 	{
-		Object payload = event.getMessage();
+        MuleMessage message = event.getMessage();
+
+        XmlToJcoFunctionTransformer transformer = new XmlToJcoFunctionTransformer(this.connector);
+        Object payload = transformer.transform(message,"UTF-8");
+        
+
+        //logger.info(event.getMessage().getPayloadAsString());
         return this.connector.getAdapter().invoke(payload);
 	}
 }

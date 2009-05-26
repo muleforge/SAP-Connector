@@ -38,65 +38,12 @@
         </xsd:annotation>
     </xsd:element>
 
+
     <xsd:complexType name="sapConnectorType">
-        <xsd:complexContent>
+	<xsd:complexContent>
             <xsd:extension base="mule:connectorType">
-	      <xsd:attribute name="jcoClient" type="xsd:string">
-		<xsd:annotation>
-		  <xsd:documentation>
-		    jco.client.client
-		  </xsd:documentation>
-		</xsd:annotation>
-	      </xsd:attribute>
-
-	      <xsd:attribute name="jcoUser" type="xsd:string">
-		<xsd:annotation>
-		  <xsd:documentation>
-		    jco.client.user
-		  </xsd:documentation>
-		</xsd:annotation>
-	      </xsd:attribute>
-
-	      <xsd:attribute name="jcoPasswd" type="xsd:string">
-		<xsd:annotation>
-		  <xsd:documentation>
-		    jco.client.user
-		  </xsd:documentation>
-		</xsd:annotation>
-	      </xsd:attribute>
-
-	      <xsd:attribute name="jcoLang" type="xsd:string">
-		<xsd:annotation>
-		  <xsd:documentation>
-		    jco.client.user
-		  </xsd:documentation>
-		</xsd:annotation>
-	      </xsd:attribute>
-
-	      <xsd:attribute name="jcoAshost" type="xsd:string">
-		<xsd:annotation>
-		  <xsd:documentation>
-		    jco.client.ashost
-		  </xsd:documentation>
-		</xsd:annotation>
-	      </xsd:attribute>
-
-	      <xsd:attribute name="jcoSysnr" type="xsd:string">
-		<xsd:annotation>
-		  <xsd:documentation>
-		    jco.client.sysnr
-		  </xsd:documentation>
-		</xsd:annotation>
-	      </xsd:attribute>
-
-	      <xsd:attribute name="jcoTrace" type="xsd:boolean">
-		<xsd:annotation>
-		  <xsd:documentation>
-		    jco.client.trace
-		  </xsd:documentation>
-		</xsd:annotation>
-	      </xsd:attribute>
-
+              <xsd:attributeGroup ref="addressAttributes"/>
+              <xsd:attributeGroup ref="propertyAttributes"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -212,6 +159,31 @@
 	  </xsd:documentation>
 	</xsd:annotation>
       </xsd:attribute>
+
+      <xsd:attribute name="jcoPoolCapacity" type="xsd:int">
+	<xsd:annotation>
+	  <xsd:documentation>
+	    jco.client.poolCapacity
+	  </xsd:documentation>
+	</xsd:annotation>
+      </xsd:attribute>
+
+      <xsd:attribute name="jcoPeakLimit" type="xsd:int">
+	<xsd:annotation>
+	  <xsd:documentation>
+	    jco.client.poolCapacity
+	  </xsd:documentation>
+	</xsd:annotation>
+      </xsd:attribute>
+
+      <xsd:attribute name="isTest" type="xsd:boolean">
+	<xsd:annotation>
+	  <xsd:documentation>
+	    flag for test mode
+	  </xsd:documentation>
+	</xsd:annotation>
+      </xsd:attribute>
+
 
     </xsd:attributeGroup>
 

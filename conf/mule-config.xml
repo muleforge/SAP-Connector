@@ -32,17 +32,24 @@
 		 jcoAshost="158.201.70.174" 
 		 jcoSysnr="00" 
 		 jcoTrace="true"
+		 jcoPoolCapacity = "3"
+		 jcoPeakLimit="10"
 		 />
-
+<!--
+<P9375361:TESTTEST@sap:158.201.70.174/?client=800&lang=JA&sysnr=00>
+-->
   <sap:endpoint name="SapEndpoint"
 		address="sap://sap-endpoint"
-		 jcoClient="800" 
-		 jcoUser="P9375361" 
-		 jcoPasswd="TESTTEST" 
-		 jcoLang="JA" 
-		 jcoAshost="158.201.70.174" 
-		 jcoSysnr="00" 
-		 jcoTrace="true"
+		jcoClient="800" 
+		jcoUser="P9375361" 
+		jcoPasswd="TESTTEST" 
+		jcoLang="JA" 
+		jcoAshost="158.201.70.174" 
+		jcoSysnr="00" 
+		jcoTrace="true"
+		jcoPoolCapacity = "3"
+		jcoPeakLimit="10"
+
 		 />
 
 
@@ -61,14 +68,28 @@
               <inbound-endpoint address="http://localhost:7777" synchronous="true"/>
               <file:inbound-endpoint address="file://./in" />
             </inbound>
-
             <outbound>
 	      <chaining-router>
 <!--
-        	  <outbound-endpoint address="sap://test1" synchronous="true" />
+        	  <outbound-endpoint address="sap://test1"  synchronous="true" />
 -->
-        	  <outbound-endpoint ref="SapEndpoint" synchronous="true" />
+        	  <outbound-endpoint ref="SapEndpoint" synchronous="true">
+		    <transformers>
+		      <custom-transformer
+			 class="org.mule.transport.sap.transformer.XmlToJcoFunctionTransformer"
+			 />
+		    </transformers>
+
+		    <response-transformers>
+		      <custom-transformer
+			 class="org.mule.transport.sap.transformer.JcoFunctionToXmlTransformer"
+			 />
+		    </response-transformers>
+
+		  </outbound-endpoint>
+
 		  <file:outbound-endpoint path="./result" />
+
 	      </chaining-router>
             </outbound>
         </service>

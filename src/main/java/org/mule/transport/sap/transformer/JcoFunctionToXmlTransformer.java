@@ -14,6 +14,11 @@ import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.mule.api.transformer.TransformerException;
+import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractTransformer;
+import org.mule.api.MuleMessage;
+
 import org.mule.transport.sap.util.MessageConstants;
 
 import com.sap.conn.jco.AbapException;
@@ -28,7 +33,6 @@ import com.sap.conn.jco.JCoRecordField;
 import com.sap.conn.jco.JCoField;
 import com.sap.conn.jco.JCoStructure;
 
-import org.mule.transport.sap.util.XmlUtils;
 
 /**
  * Describe class <code>JcoFunctionToXmlTransformer</code> here.
@@ -36,13 +40,27 @@ import org.mule.transport.sap.util.XmlUtils;
  * @author <a href="mailto:makoto@zebra"></a>
  * @version 1.0
  */
-public class JcoFunctionToXmlTransformer {
+public class JcoFunctionToXmlTransformer
+    extends AbstractMessageAwareTransformer {
+
     private static Log logger = LogFactory.getLog(JcoFunctionToXmlTransformer.class);
     XMLOutputFactory factory = null;    
     XMLEventFactory eventFactory = null;
     XMLEventWriter writer = null;
     XMLEvent event = null;
-    
+
+    public Object transform(MuleMessage message, String encoding)
+        throws TransformerException {
+        String result = null;
+        JCoFunction function = (JCoFunction)message.getPayload();
+        try {
+            result = (String)transform(function, encoding);
+        } catch(XMLStreamException e) {
+            throw new TransformerException(this,e);
+        }
+        return result;
+    }
+
     /**
      * Describe <code>transform</code> method here.
      *
@@ -50,9 +68,14 @@ public class JcoFunctionToXmlTransformer {
      * @return an <code>Object</code> value
      * @exception XMLStreamException if an error occurs
      */
-    public Object transform(Object obj) throws XMLStreamException {
+    public Object transform(Object obj, String encoding) throws XMLStreamException {
         // getting JCoFunction object
         JCoFunction function = (JCoFunction)obj;
+
+        logger.info(function.getImportParameterList().toXML());
+        logger.info(function.getExportParameterList().toXML());
+        logger.info(function.getTableParameterList().toXML());
+
         
         factory = XMLOutputFactory.newInstance();
         eventFactory = XMLEventFactory.newInstance(); 
@@ -170,6 +193,7 @@ public class JcoFunctionToXmlTransformer {
         if (parameterList == null) {
             return;
         }
+        
         JCoParameterFieldIterator
             parameterFieldIterator = parameterList.getParameterFieldIterator();
 
@@ -309,6 +333,51 @@ public class JcoFunctionToXmlTransformer {
     private void writeEndDocument(XMLEventWriter writer) throws XMLStreamException {
         XMLEvent event = eventFactory.createEndDocument();
         writer.add(event);
+    }
+
+    public static boolean isBapiReturnCodeOkay(final JCoFunction function)
+    {
+        try
+        {
+            JCoParameterList parameterList = function.getExportParameterList();
+
+            if ((parameterList != null) && (parameterList.getValue("RETURN")!=null))
+            {
+                JCoStructure bapiReturn = parameterList.getStructure("RETURN");
+                String type = bapiReturn.getString("TYPE");
+                if ("".equals(type) || "S".equals(type)==true)  {
+                    logger.info("JCo call is ok ");
+                } else {
+                    logger.info("JCo call is ng ");
+                }
+                return "".equals(type) || "S".equals(type);
+            }
+            else
+            {
+                parameterList = function.getTableParameterList();
+
+                if ((parameterList != null) &&
+                    (parameterList.getValue("RETURN")!=null))
+                {
+                    JCoTable bapiReturn = parameterList.getTable("RETURN");
+                    int count = bapiReturn.getNumRows();
+                    for (int i=0; i<count; i++)
+                    {
+                        String type = bapiReturn.getString("TYPE");
+                        if (!("".equals(type) || "S".equals(type)))
+                            return false;
+                    }
+                    logger.info("JCo call is ok ");
+                    return true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        return false;
     }
 
 }

@@ -1,4 +1,4 @@
-package org.mule.transport.sap;
+package org.mule.transport.sap.transformer;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

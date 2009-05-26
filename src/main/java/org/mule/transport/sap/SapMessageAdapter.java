@@ -16,8 +16,6 @@ import org.w3c.dom.Node;
 /**
  * Describe class <code>SapMessageAdapter</code> here.
  *
- * @author <a href="mailto:makoto@zebra"></a>
- * @version 1.0
  */
 public class SapMessageAdapter extends AbstractMessageAdapter 
 {
@@ -37,6 +35,8 @@ public class SapMessageAdapter extends AbstractMessageAdapter
         if (message instanceof byte[]) {
             this.payload = message;
         } else if (message instanceof String) {
+            this.payload = message;
+        } else if (message instanceof Object) {
             this.payload = message;
         } else {
             throw new MessageTypeNotSupportedException(message, getClass());
