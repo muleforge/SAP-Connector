@@ -127,6 +127,7 @@ public class JcoAdapter
     public void invoke(final JCoFunction function)
         throws JCoException
     {
+        logger.info("------------------> destination : "+destination);
         function.execute(this.destination);
         return;
     }

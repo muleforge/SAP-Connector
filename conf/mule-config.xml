@@ -85,13 +85,11 @@
 			 class="org.mule.transport.sap.transformer.JcoFunctionToXmlTransformer"
 			 />
 		    </response-transformers>
-
 		  </outbound-endpoint>
-
 		  <file:outbound-endpoint path="./result" />
-
 	      </chaining-router>
             </outbound>
         </service>
     </model>
 </mule>
+

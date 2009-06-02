@@ -106,9 +106,11 @@ public class XmlToJcoFunctionTransformer
                     
                 } else if (eventType==XMLStreamReader.START_ELEMENT) {
                     // find START_ELEMENT
-                    
                     localName = reader.getLocalName();
-                    
+
+                    logger.info("START ELEMENT IS FOUND");
+                    logger.info("start localName = "+localName);
+
                     if (localName.equals(MessageConstants.JCO)) {
                         functionName = getAttributeValue(MessageConstants.JCO_ATTR_NAME,reader);
 
@@ -117,38 +119,39 @@ public class XmlToJcoFunctionTransformer
                         } catch(JCoException e) {
                             throw new XMLStreamException(e);
                         }
+                        logger.info("function name:"+functionName);
                         
-                        System.out.println("function name:"+functionName);
                     } else if (functionName!=null) {
                         if (localName.equals(MessageConstants.IMPORT)) {
                             //recordType = IMPORT;
-                            logger.info("localName = "+localName);
 
                             push(function.getImportParameterList());
                         } else if (localName.equals(MessageConstants.EXPORT)) {
                             //recordType = EXPORT;
-                            logger.info("localName = "+localName);
                                                         
                             push(function.getExportParameterList());
                         } else if (localName.equals(MessageConstants.TABLES)) {
                             //recordType = TABLES;
-                            logger.info("localName = "+localName);
+                            tableName = null;
                             push(function.getTableParameterList());
+
                         } else if (localName.equals(MessageConstants.TABLE)) {
+                            if(tableName!=null) {
+                                pop();
+                            }
                             tableName
                                 = getAttributeValue(MessageConstants.TABLE_ATTR_NAME,reader);
-                            logger.info("localName = "+localName);
+
                             logger.info("tableName = "+tableName);
                             push(this.record.getTable(tableName));
                         } else if (localName.equals(MessageConstants.STRUCTURE)) {
                             structureName
                                 = getAttributeValue(MessageConstants.STRUCTURE_ATTR_NAME,reader);
-                            logger.info("localName = "+localName);
                             push(this.record.getStructure(structureName));
                         } else if (localName.equals(MessageConstants.ROW)) {
                             rowId
                                 = getAttributeValue(MessageConstants.ROW_ATTR_ID,reader);
-                            logger.info("localName = "+localName);
+                            logger.info("rowId = "+rowId);
                             if (this.record instanceof JCoTable) {
                                 ((JCoTable)this.record).appendRow();
                             }
@@ -156,27 +159,35 @@ public class XmlToJcoFunctionTransformer
                             fieldName =
                                 getAttributeValue(MessageConstants.STRUCTURE_ATTR_NAME,reader);
                             value = reader.getElementText().trim(); // get an element value
-                            logger.info("localName = "+localName);
                             logger.info("FieldName = "+fieldName);
                             logger.info("value = "+value);
+
                             this.record.setValue(fieldName,value);
 
                         }
                     }
+
+
                 } else if (eventType==XMLStreamReader.END_DOCUMENT) {
+
                     // find END_DOCUMENT
+                    logger.info("END DOCUMENT IS FOUND");
                 } else if (eventType==XMLStreamReader.END_ELEMENT) {
+                    logger.info("END ELEMENT IS FOUND");
+                    logger.info("end localName = "+localName);
                     // find END_ELEMENT
                     if (localName.equals(MessageConstants.IMPORT) ||
                         localName.equals(MessageConstants.EXPORT) ||
                         localName.equals(MessageConstants.TABLES) ||
                         localName.equals(MessageConstants.TABLE) ||
-                        localName.equals(MessageConstants.STRUCTURE))
+                         localName.equals(MessageConstants.STRUCTURE))
                         {
                             pop();
                         }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (reader != null) {
                 try {
@@ -188,17 +199,19 @@ public class XmlToJcoFunctionTransformer
                     stream.close();
                 } catch (IOException ex) {}
             }
-            logger.info(function.getImportParameterList().toXML());
-            logger.info(function.getExportParameterList().toXML());
-                                        
-            logger.info(function.getTableParameterList().toXML());
+            //logger.info("\n"+function.getImportParameterList().toXML());
+            //logger.info("\n"+function.getExportParameterList().toXML());
+            //logger.info("\n"+function.getTableParameterList().toXML());
             return function;
         }
     }
 
     private String getAttributeValue(String name, XMLStreamReader reader) {
         int count = reader.getAttributeCount();
-        
+
+        if(true) {
+            return reader.getAttributeValue(0);
+        }
         for (int i = 0; i < count; i++) {
             if (reader.getAttributeLocalName(i).equals(name)) {
                 String value = reader.getAttributeValue(i);

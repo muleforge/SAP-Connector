@@ -27,16 +27,16 @@
     </table>
     <table name="CURRENCYAMOUNT">
       <row id="0">
-	<field name="ITEMNO_ACC">000000001</field>
-	<field name="CURRENCY">JPY</field>
-	<field name="AMT_DOCCUR">100</field>
+        <field name="ITEMNO_ACC">000000001</field>
+        <field name="CURRENCY">JPY</field>
+        <field name="AMT_DOCCUR">100</field>
       </row>
       <row id="1">
-	<field name="ITEMNO_ACC">000000002</field>
-	<field name="CURRENCY">JPY</field>
-	<field name="AMT_DOCCUR">-100</field>
+        <field name="ITEMNO_ACC">000000002</field>
+        <field name="CURRENCY">JPY</field>
+        <field name="AMT_DOCCUR">-100</field>
       </row>
     </table>
-  </tables>
+</tables>
 </jco>
 
