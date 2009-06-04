@@ -105,13 +105,8 @@ public class SapMessageDispatcher extends AbstractMessageDispatcher
 
     private Object invoke(MuleEvent event) throws Exception
 	{
-        MuleMessage message = event.getMessage();
-
-        XmlToJcoFunctionTransformer transformer = new XmlToJcoFunctionTransformer(this.connector);
-        Object payload = transformer.transform(message,"UTF-8");
+        Object payload = event.transformMessage();
         
-
-        //logger.info(event.getMessage().getPayloadAsString());
         return this.connector.getAdapter().invoke(payload);
 	}
 }

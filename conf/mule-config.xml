@@ -49,9 +49,7 @@
 		jcoTrace="true"
 		jcoPoolCapacity = "3"
 		jcoPeakLimit="10"
-
 		 />
-
 
     <stdio:connector name="SystemStreamConnector"
         promptMessage="Please enter something: "
