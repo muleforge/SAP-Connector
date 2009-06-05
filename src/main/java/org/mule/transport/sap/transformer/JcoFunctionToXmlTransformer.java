@@ -72,9 +72,9 @@ public class JcoFunctionToXmlTransformer
         // getting JCoFunction object
         JCoFunction function = (JCoFunction)obj;
 
-        logger.info(function.getImportParameterList().toXML());
-        logger.info(function.getExportParameterList().toXML());
-        logger.info(function.getTableParameterList().toXML());
+        //logger.info(function.getImportParameterList().toXML());
+        //logger.info(function.getExportParameterList().toXML());
+        //logger.info(function.getTableParameterList().toXML());
 
         
         factory = XMLOutputFactory.newInstance();
@@ -143,7 +143,7 @@ public class JcoFunctionToXmlTransformer
             result = stringWriter.toString();
             
         } catch (XMLStreamException ex) {
-            System.err.println("出力に失敗しました");
+            throw ex;
         } finally {
             // close
             if (writer != null) {

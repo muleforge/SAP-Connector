@@ -67,7 +67,6 @@ public class SapMessageDispatcher extends AbstractMessageDispatcher
     {
 		logger.info("*****SapMessageDispatcher.doSend()*****");
         //logger.info(event.getMessageAsString());
-
 		return new DefaultMuleMessage(this.connector.getMessageAdapter(invoke(event)));
 	}
 
@@ -106,7 +105,6 @@ public class SapMessageDispatcher extends AbstractMessageDispatcher
     private Object invoke(MuleEvent event) throws Exception
 	{
         Object payload = event.transformMessage();
-        
         return this.connector.getAdapter().invoke(payload);
 	}
 }

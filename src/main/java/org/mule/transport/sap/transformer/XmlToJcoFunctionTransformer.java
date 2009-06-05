@@ -108,8 +108,8 @@ public class XmlToJcoFunctionTransformer
                     // find START_ELEMENT
                     localName = reader.getLocalName();
 
-                    logger.info("START ELEMENT IS FOUND");
-                    logger.info("start localName = "+localName);
+                    logger.debug("START ELEMENT IS FOUND");
+                    logger.debug("start localName = "+localName);
 
                     if (localName.equals(MessageConstants.JCO)) {
                         functionName = getAttributeValue(MessageConstants.JCO_ATTR_NAME,reader);
@@ -119,7 +119,7 @@ public class XmlToJcoFunctionTransformer
                         } catch(JCoException e) {
                             throw new XMLStreamException(e);
                         }
-                        logger.info("function name:"+functionName);
+                        logger.debug("function name:"+functionName);
                         
                     } else if (functionName!=null) {
                         if (localName.equals(MessageConstants.IMPORT)) {
@@ -142,7 +142,7 @@ public class XmlToJcoFunctionTransformer
                             tableName
                                 = getAttributeValue(MessageConstants.TABLE_ATTR_NAME,reader);
 
-                            logger.info("tableName = "+tableName);
+                            logger.debug("tableName = "+tableName);
                             push(this.record.getTable(tableName));
                         } else if (localName.equals(MessageConstants.STRUCTURE)) {
                             structureName
@@ -151,7 +151,7 @@ public class XmlToJcoFunctionTransformer
                         } else if (localName.equals(MessageConstants.ROW)) {
                             rowId
                                 = getAttributeValue(MessageConstants.ROW_ATTR_ID,reader);
-                            logger.info("rowId = "+rowId);
+                            logger.debug("rowId = "+rowId);
                             if (this.record instanceof JCoTable) {
                                 ((JCoTable)this.record).appendRow();
                             }
@@ -159,8 +159,8 @@ public class XmlToJcoFunctionTransformer
                             fieldName =
                                 getAttributeValue(MessageConstants.STRUCTURE_ATTR_NAME,reader);
                             value = reader.getElementText().trim(); // get an element value
-                            logger.info("FieldName = "+fieldName);
-                            logger.info("value = "+value);
+                            logger.debug("FieldName = "+fieldName);
+                            logger.debug("value = "+value);
 
                             this.record.setValue(fieldName,value);
 
@@ -171,10 +171,10 @@ public class XmlToJcoFunctionTransformer
                 } else if (eventType==XMLStreamReader.END_DOCUMENT) {
 
                     // find END_DOCUMENT
-                    logger.info("END DOCUMENT IS FOUND");
+                    logger.debug("END DOCUMENT IS FOUND");
                 } else if (eventType==XMLStreamReader.END_ELEMENT) {
-                    logger.info("END ELEMENT IS FOUND");
-                    logger.info("end localName = "+localName);
+                    logger.debug("END ELEMENT IS FOUND");
+                    logger.debug("end localName = "+localName);
                     // find END_ELEMENT
                     if (localName.equals(MessageConstants.IMPORT) ||
                         localName.equals(MessageConstants.EXPORT) ||
@@ -187,7 +187,8 @@ public class XmlToJcoFunctionTransformer
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.fatal(e);
+            throw new TransformerException(this,e);
         } finally {
             if (reader != null) {
                 try {
@@ -199,9 +200,10 @@ public class XmlToJcoFunctionTransformer
                     stream.close();
                 } catch (IOException ex) {}
             }
-            //logger.info("\n"+function.getImportParameterList().toXML());
-            //logger.info("\n"+function.getExportParameterList().toXML());
-            //logger.info("\n"+function.getTableParameterList().toXML());
+            logger.debug("\n"+function.getImportParameterList().toXML());
+            logger.debug("\n"+function.getExportParameterList().toXML());
+            logger.debug("\n"+function.getTableParameterList().toXML());
+            
             return function;
         }
     }
