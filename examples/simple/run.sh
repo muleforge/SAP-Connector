@@ -1,4 +1,5 @@
-export MULE_LIB=target/classes/
-export LD_LIBRARY_PATH=/home/makoto/java/sap/sapjco3/
+export MULE_LIB=../../target/classes/
+export SAPJCO3_HOME=/home/makoto/java/sap/sapjco3
+export LD_LIBRARY_PATH=$SAPJCO3_HOME
 mule -config conf/mule-config.xml
 

@@ -50,11 +50,11 @@
 		jcoPoolCapacity = "3"
 		jcoPeakLimit="10"
 		 />
-
+<!--
     <stdio:connector name="SystemStreamConnector"
         promptMessage="Please enter something: "
         messageDelayTime="1000"/>
-
+-->
     <file:connector name="FileConnector"
   		    moveToDirectory="./file_in/move_to" 
   		    streaming="false" />
