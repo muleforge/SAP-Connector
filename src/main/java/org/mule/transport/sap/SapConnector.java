@@ -276,24 +276,6 @@ public class SapConnector extends AbstractConnector
     }
 
     /**
-     * Gets the value of logger
-     *
-     * @return the value of logger
-     */
-    public static Log getLogger() {
-        return SapConnector.logger;
-    }
-
-    /**
-     * Sets the value of logger
-     *
-     * @param argLogger Value to assign to this.logger
-     */
-    public static void setLogger(Log argLogger) {
-        SapConnector.logger = argLogger;
-    }
-
-    /**
      * Gets the value of isTest
      *
      * @return the value of isTest

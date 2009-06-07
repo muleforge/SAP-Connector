@@ -52,7 +52,7 @@ public class JcoAdapter
      *
      * @throws Exception
      */
-    public synchronized void doInitialize() throws Exception
+    public synchronized void doInitialize(String name) throws Exception
     {
         Properties connectProperties = new Properties();
         connectProperties.setProperty(DestinationDataProvider.JCO_ASHOST,
@@ -81,9 +81,11 @@ public class JcoAdapter
         connectProperties.setProperty(DestinationDataProvider.JCO_PEAK_LIMIT,
                                       new Integer(this.connector.getJcoPeakLimit()).toString());
 
-        createDataFile(ABAP_AS_POOLED, "jcoDestination", connectProperties);
+        //createDataFile(ABAP_AS_POOLED, "jcoDestination", connectProperties);
+        com.sap.conn.jco.ext.Environment.registerDestinationDataProvider(myProvider);
+        createDataFile(name, "jcoDestination", connectProperties);
 
-        destination = JCoDestinationManager.getDestination(ABAP_AS_POOLED);
+        destination = JCoDestinationManager.getDestination(name);
         this.repository =  destination.getRepository();
     }
 

@@ -78,7 +78,7 @@ public class SapMessageDispatcher extends AbstractMessageDispatcher
     protected void doConnect() throws Exception
     {
         logger.info("*****SapMessageDispatcher.doConnect()*****");
-        this.connector.getAdapter().doInitialize();
+        this.connector.getAdapter().doInitialize(this.getEndpoint().getName());
 	}
 
 	/**
