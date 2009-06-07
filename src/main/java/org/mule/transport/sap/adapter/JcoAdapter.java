@@ -82,7 +82,9 @@ public class JcoAdapter
                                       new Integer(this.connector.getJcoPeakLimit()).toString());
 
         //createDataFile(ABAP_AS_POOLED, "jcoDestination", connectProperties);
-        com.sap.conn.jco.ext.Environment.registerDestinationDataProvider(myProvider);
+
+        //MyDestinationDataProvider myProvider = new MyDestinationDataProvider();
+        //com.sap.conn.jco.ext.Environment.registerDestinationDataProvider(myProvider);
         createDataFile(name, "jcoDestination", connectProperties);
 
         destination = JCoDestinationManager.getDestination(name);

@@ -18,6 +18,7 @@ public class JcoFunctionToXmlTransformerTest extends TestCase
     }
 
     public void testParse1 () {
+        /*
         try {
             JcoFunctionToXmlTransformer transformer = new JcoFunctionToXmlTransformer();
             String xmlString = (String)transformer.transform(null);
@@ -26,5 +27,6 @@ public class JcoFunctionToXmlTransformerTest extends TestCase
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 }

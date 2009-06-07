@@ -12,9 +12,9 @@
     <muleVersion>2.2.1</muleVersion>
   </properties>
   <scm>
-    <connection>scm:svn:http://svn.muleforge.org/mule-transport-sap/tags/mule-transport-sap-1.1</connection>
-    <developerConnection>scm:svn:https://svn.muleforge.org/mule-transport-sap/tags/mule-transport-sap-1.1</developerConnection>
-    <url>https://svn.mule.muleforge.org/tags/mule-transport-sap-1.1</url>
+    <connection>scm:svn:http://svn.muleforge.org/mule-transport-sap/tags/mule-transport-sapcpal</connection>
+    <developerConnection>scm:svn:https://svn.muleforge.org/mule-transport-sap/tags/mule-transport-sapcpal</developerConnection>
+    <url>https://svn.mule.muleforge.org/tags/mule-transport-sapcpal</url>
   </scm>
   <distributionManagement>
     <repository>
@@ -91,11 +91,6 @@
     </plugins>
   </build>
   <dependencies>
-    <dependency>
-      <groupId>com.sap.mw.jco</groupId>
-      <artifactId>jcomock</artifactId>
-      <version>1.1</version>
-    </dependency>
     <dependency>
       <groupId>com.sap.conn.jco</groupId>
       <artifactId>sapjco</artifactId>
