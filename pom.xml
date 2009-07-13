@@ -1,7 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.mule.transports</groupId>
-  <artifactId>mule-transport-sap</artifactId>
+  <!-- artifactId>mule-transport-sap</artifactId -->
+  <artifactId>SAPCPAL</artifactId>
   <packaging>jar</packaging>
   <version>2.0-alpha</version>
   <name>Mule SAP/JCo Transport</name>
@@ -12,22 +13,22 @@
     <muleVersion>2.2.1</muleVersion>
   </properties>
   <scm>
-    <connection>scm:svn:http://svn.muleforge.org/mule-transport-sap/tags/mule-transport-sapcpal</connection>
-    <developerConnection>scm:svn:https://svn.muleforge.org/mule-transport-sap/tags/mule-transport-sapcpal</developerConnection>
-    <url>https://svn.mule.muleforge.org/tags/mule-transport-sapcpal</url>
+    <connection>scm:svn:http://svn.muleforge.org/mule-transport-sap/tags/mule-transport-SAPCPAL</connection>
+    <developerConnection>scm:svn:https://svn.muleforge.org/mule-transport-sap/tags/mule-transport-SAPCPAL</developerConnection>
+    <url>https://svn.mule.muleforge.org/tags/mule-transport-SAPCPAL</url>
   </scm>
   <distributionManagement>
     <repository>
       <id>muleforge.webdav.releases</id>
-      <url>dav:https://dav.muleforge.org/repository/${artifactId}/</url>
+      <url>dav:https://dav.muleforge.org/repository/sapcpal</url>
     </repository>
     <snapshotRepository>
       <id>muleforge.webdav.snapshots</id>
-      <url>dav:https://dav.muleforge.org/snapshots.repository/${artifactId}/</url>
+      <url> dav:https://dav.muleforge.org/snapshots.repository/sapcpal/</url>
     </snapshotRepository>
     <site>
       <id>muleforge.webdav.sites</id>
-      <url>dav:https://dav.muleforge.org/${artifactId}/</url>
+      <url>dav:https://dav.muleforge.org/sapcpal/</url>
     </site>
   </distributionManagement>
 
@@ -35,7 +36,7 @@
     <repository>
       <id>sap-dep</id>
       <name>SAP Project Dependencies</name>
-      <url>http://repository.muleforge.org/org/mule/transports/mule-transport-sap/dependencies</url>
+      <url>http://repository.muleforge.org/org/mule/transports/sapcpal/dependencies</url>
       <layout>default</layout>
     </repository>
   </repositories>
@@ -70,6 +71,15 @@
       </plugin>
 
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagBase>dav:https://dav.muleforge.org/repository/sapcpal/tags</tagBase>
+          <goals>clean,package,cargo:deploy</goals>
+        </configuration>
+      </plugin>
+
+      <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-eclipse-plugin</artifactId>
 	<configuration>
@@ -88,6 +98,8 @@
 	  <appendAssemblyId>false</appendAssemblyId>
 	</configuration>
       </plugin>
+
+
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-dependency-plugin</artifactId>
