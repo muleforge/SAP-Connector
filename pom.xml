@@ -4,7 +4,7 @@
   <!-- artifactId>mule-transport-sap</artifactId -->
   <artifactId>SAPCPAL</artifactId>
   <packaging>jar</packaging>
-  <version>2.0-alpha</version>
+  <version>2.0-alpha2-SNAPSHOT</version>
   <name>Mule SAP/JCo Transport</name>
   <description>
     Provides support for polling and requesting SAP/R3 BAPI via SAP JCo
@@ -13,9 +13,9 @@
     <muleVersion>2.2.1</muleVersion>
   </properties>
   <scm>
-    <connection>scm:svn:http://svn.muleforge.org/mule-transport-sap/tags/mule-transport-SAPCPAL</connection>
-    <developerConnection>scm:svn:https://svn.muleforge.org/mule-transport-sap/tags/mule-transport-SAPCPAL</developerConnection>
-    <url>https://svn.mule.muleforge.org/tags/mule-transport-SAPCPAL</url>
+    <connection>scm:svn:http://svn.muleforge.org/sapcpal/trunk</connection>
+    <developerConnection>scm:svn:https://svn.muleforge.org/sapcpal/trunk</developerConnection>
+    <url>https://svn.muleforge.org/sapcpal/trunk</url>
   </scm>
   <distributionManagement>
     <repository>
