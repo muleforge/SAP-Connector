@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding='UTF-8' ?>
 <jco name="Z_BAPI_ACC_DOCUMENT_POST" version="1.0">
   <import>
     <structure name="DOCUMENTHEADER">
