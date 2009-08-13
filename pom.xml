@@ -131,13 +131,11 @@
     </plugins>
   </build>
   <dependencies>
-  <!--
     <dependency>
       <groupId>com.sap.conn.jco</groupId>
       <artifactId>sapjco</artifactId>
       <version>3.0.1</version>
     </dependency>
--->
     <dependency>
       <groupId>org.mule.transports</groupId>
       <artifactId>mule-transport-vm</artifactId>
