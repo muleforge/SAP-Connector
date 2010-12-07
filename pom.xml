@@ -10,7 +10,8 @@
     Provides support for polling and requesting SAP/R3 BAPI via SAP JCo
   </description>	
   <properties>
-    <muleVersion>2.2.1</muleVersion>
+    <muleVersion>3.0.0</muleVersion>
+    <!-- muleVersion>2.2.1</muleVersion -->
   </properties>
   <scm>
     <connection>scm:svn:http://svn.muleforge.org/sapcpal/trunk</connection>
