@@ -59,6 +59,11 @@ public class JcoFunctionToXmlTransformer
     XMLEventWriter writer = null;
     XMLEvent event = null;
 
+    boolean return_flag = false; // This becomes true when RETURN table is parsing
+    int error_type = 0;  // 0 --- type ="I", 1 --- type ="1", 2 --- type="2"
+    String error_log_string = "";
+    String table_name = "";
+
     public Object transform(MuleMessage message, String encoding)
         throws TransformerException {
         String result = null;
@@ -81,11 +86,6 @@ public class JcoFunctionToXmlTransformer
     public Object transform(Object obj, String encoding) throws XMLStreamException {
         // getting JCoFunction object
         JCoFunction function = (JCoFunction)obj;
-
-        //logger.info(function.getImportParameterList().toXML());
-        //logger.info(function.getExportParameterList().toXML());
-        //logger.info(function.getTableParameterList().toXML());
-
         
         factory = XMLOutputFactory.newInstance();
         eventFactory = XMLEventFactory.newInstance(); 
@@ -192,7 +192,7 @@ public class JcoFunctionToXmlTransformer
                              JCoFunction function) throws XMLStreamException {
 
         writeStartElement(writer, MessageConstants.TABLES);
-        // writing inside of TAVLES
+        // writing inside of TABLES
         writeTableParameterList(writer, function.getTableParameterList());
 
         writeEndElement(writer, MessageConstants.TABLES);
@@ -254,6 +254,13 @@ public class JcoFunctionToXmlTransformer
 
             JCoTable jcoTable = parameterField.getTable();
 
+            table_name = parameterField.getName();
+            if (table_name.equals("RETURN"))
+            {
+              return_flag = true;
+            }
+
+
             writeStartElement(writer, MessageConstants.TABLE);
             writeAttribute(writer,MessageConstants.TABLE_ATTR_NAME,parameterField.getName());
                 
@@ -274,9 +281,31 @@ public class JcoFunctionToXmlTransformer
                     JCoRecordField recordField = iterator.nextRecordField();
                     writeField(writer, recordField);
                 }
+
+
+                if (return_flag==true)
+                {
+                  if (error_type==2)
+                  {
+                    logger.fatal("JCO call fatal "+error_log_string);
+                  }
+                  else if (error_type==1) {
+                    logger.warn("JCO call warning "+error_log_string);
+                  }
+                  else if (error_type==0) {
+                    logger.info("JCO call info "+error_log_string);
+                  }
+
+                  
+                  return_flag = false;
+                  error_type = 0;
+                  error_log_string = "";
+                }
+
                 writeEndElement(writer, MessageConstants.ROW);
 
             }
+            
             writeEndElement(writer,MessageConstants.TABLE);
 
         }
@@ -298,6 +327,7 @@ public class JcoFunctionToXmlTransformer
                                            abapException.getKey());
                             writeCharacters(writer, abapException.getMessage());
                             writeEndElement(writer, MessageConstants.ERROR);
+                            logger.fatal("ABAP exception occured "+abapException.getMessage());
                         }
                     writeEndElement(writer, MessageConstants.ERRORS);
                 }
@@ -307,6 +337,17 @@ public class JcoFunctionToXmlTransformer
     private void writeField(XMLEventWriter writer, JCoField field) throws XMLStreamException {
         writeStartElement(writer,MessageConstants.FIELD);
         writeAttribute(writer,MessageConstants.FIELD_ATTR_NAME,field.getName());
+        if (return_flag==true)
+        {
+          if (field.getName().equals("TYPE")) {
+            if (field.getString().trim().equals("S")) {
+              error_type = 2;
+            } else if (field.getString().trim().equals("E")) {
+              error_type = 1;
+            }
+          }
+          error_log_string += ","+field.getName()+":"+field.getString().trim();
+        }
         writeCharacters(writer, field.getString().trim());
         writeEndElement(writer, MessageConstants.FIELD);
     }
@@ -358,7 +399,7 @@ public class JcoFunctionToXmlTransformer
                 if ("".equals(type) || "S".equals(type)==true)  {
                     logger.info("JCo call is ok ");
                 } else {
-                    logger.info("JCo call is ng ");
+                    logger.fatal("JCo call is failed ");
                 }
                 return "".equals(type) || "S".equals(type);
             }
@@ -375,7 +416,10 @@ public class JcoFunctionToXmlTransformer
                     {
                         String type = bapiReturn.getString("TYPE");
                         if (!("".equals(type) || "S".equals(type)))
+                        {
+                          logger.fatal("JCo call is failed ");
                             return false;
+                        }
                     }
                     logger.info("JCo call is ok ");
                     return true;
