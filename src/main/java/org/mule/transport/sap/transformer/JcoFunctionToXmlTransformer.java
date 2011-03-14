@@ -53,15 +53,27 @@ import com.sap.conn.jco.JCoStructure;
 public class JcoFunctionToXmlTransformer
     extends AbstractMessageAwareTransformer {
 
+  /**
+     S = normal end message(NORMAL) INFO
+     E = error message(ERROR) ERROR
+     W = warning message(WARNING) WARNING
+     I = info message(INFO) INFO
+     A = abort message(ABORT) FATAL
+  */
+    enum SapMessageStatus {NORMAL, ERROR, WARN, INFO, FATAL}
+
+
+  
     private static Log logger = LogFactory.getLog(JcoFunctionToXmlTransformer.class);
     XMLOutputFactory factory = null;    
     XMLEventFactory eventFactory = null;
     XMLEventWriter writer = null;
     XMLEvent event = null;
 
-    boolean return_flag = false; // This becomes true when RETURN table is parsing
-    int error_type = 0;  // 0 --- type ="I", 1 --- type ="1", 2 --- type="2"
-    String error_log_string = "";
+    boolean returnFlag = false; // This becomes true when RETURN table is parsing
+  
+    SapMessageStatus messageStatus;
+    String messageLogString = "";
     String table_name = "";
 
     public Object transform(MuleMessage message, String encoding)
@@ -257,7 +269,7 @@ public class JcoFunctionToXmlTransformer
             table_name = parameterField.getName();
             if (table_name.equals("RETURN"))
             {
-              return_flag = true;
+              returnFlag = true;
             }
 
 
@@ -283,23 +295,26 @@ public class JcoFunctionToXmlTransformer
                 }
 
 
-                if (return_flag==true)
+                if (returnFlag==true)
                 {
-                  if (error_type==2)
+                  switch(messageStatus)
                   {
-                    logger.fatal("JCO call fatal "+error_log_string);
+                  case NORMAL:
+                  case INFO:
+                    logger.info("JCO call info "+messageLogString);
+                    break;
+                  case WARN:
+                    logger.warn("JCO call info "+messageLogString);
+                    break;
+                  case ERROR:
+                    logger.error("JCO call info "+messageLogString);
+                    break;
+                  case FATAL:
+                    logger.fatal("JCO call info "+messageLogString);
+                    break;
                   }
-                  else if (error_type==1) {
-                    logger.warn("JCO call warning "+error_log_string);
-                  }
-                  else if (error_type==0) {
-                    logger.info("JCO call info "+error_log_string);
-                  }
-
-                  
-                  return_flag = false;
-                  error_type = 0;
-                  error_log_string = "";
+                  returnFlag = false;
+                  messageLogString = "";
                 }
 
                 writeEndElement(writer, MessageConstants.ROW);
@@ -337,16 +352,22 @@ public class JcoFunctionToXmlTransformer
     private void writeField(XMLEventWriter writer, JCoField field) throws XMLStreamException {
         writeStartElement(writer,MessageConstants.FIELD);
         writeAttribute(writer,MessageConstants.FIELD_ATTR_NAME,field.getName());
-        if (return_flag==true)
+        if (returnFlag==true)
         {
           if (field.getName().equals("TYPE")) {
             if (field.getString().trim().equals("S")) {
-              error_type = 2;
+              messageStatus = SapMessageStatus.NORMAL;
             } else if (field.getString().trim().equals("E")) {
-              error_type = 1;
+              messageStatus = SapMessageStatus.ERROR;
+            } else if (field.getString().trim().equals("W")) {
+              messageStatus = SapMessageStatus.WARN;
+            } else if (field.getString().trim().equals("I")) {
+              messageStatus = SapMessageStatus.INFO;
+            } else if (field.getString().trim().equals("A")) {
+              messageStatus = SapMessageStatus.FATAL;
             }
           }
-          error_log_string += ","+field.getName()+":"+field.getString().trim();
+          messageLogString += ","+field.getName()+":"+field.getString().trim();
         }
         writeCharacters(writer, field.getString().trim());
         writeEndElement(writer, MessageConstants.FIELD);
